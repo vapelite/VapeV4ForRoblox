@@ -727,37 +727,43 @@ run(function()
 		end
 	})
 
+	local function safeGet(fn)
+		local ok, result = pcall(fn)
+		if not ok then return nil end
+		return result
+	end
+
 	local remoteNames = {
-		AfkStatus = debug.getproto(Knit.Controllers.AfkController.KnitStart, 1),
-		AttackEntity = Knit.Controllers.SwordController.sendServerRequest,
-		BeePickup = Knit.Controllers.BeeNetController.trigger,
-		CannonAim = debug.getproto(Knit.Controllers.CannonController.startAiming, 5),
-		CannonLaunch = Knit.Controllers.CannonHandController.launchSelf,
-		ConsumeBattery = debug.getproto(Knit.Controllers.BatteryController.onKitLocalActivated, 1),
-		ConsumeItem = debug.getproto(Knit.Controllers.ConsumeController.onEnable, 1),
-		ConsumeSoul = Knit.Controllers.GrimReaperController.consumeSoul,
-		ConsumeTreeOrb = debug.getproto(Knit.Controllers.EldertreeController.createTreeOrbInteraction, 1),
-		DepositPinata = debug.getproto(debug.getproto(require(game:GetService("StarterPlayer").StarterPlayerScripts.TS.controllers.game.items["piggy-bank"]["piggy-bank-controller"]).default.KnitStart, 2), 5),
-		DragonBreath = debug.getproto(Knit.Controllers.VoidDragonController.onKitLocalActivated, 5),
-		DragonEndFly = debug.getproto(Knit.Controllers.VoidDragonController.flapWings, 1),
-		DragonFly = Knit.Controllers.VoidDragonController.flapWings,
-		DropItem = Knit.Controllers.ItemDropController.dropItemInHand,
-		EquipItem = debug.getproto(require(replicatedStorage.TS.entity.entities['inventory-entity']).InventoryEntity.equipItem, 3),
-		FireProjectile = debug.getupvalue(Knit.Controllers.ProjectileController.launchProjectileWithValues, 2),
-		GroundHit = Knit.Controllers.FallDamageController.KnitStart,
-		GuitarHeal = Knit.Controllers.GuitarController.performHeal,
-		HannahKill = debug.getproto(Knit.Controllers.HannahController.registerExecuteInteractions, 1),
-		HarvestCrop = debug.getproto(debug.getproto(Knit.Controllers.CropController.KnitStart, 4), 1),
-		KaliyahPunch = debug.getproto(Knit.Controllers.DragonSlayerController.onKitLocalActivated, 1),
-		MageSelect = debug.getproto(Knit.Controllers.MageController.registerTomeInteraction, 1),
-		MinerDig = debug.getproto(Knit.Controllers.MinerController.setupMinerPrompts, 1),
-		PickupItem = Knit.Controllers.ItemDropController.checkForPickup,
-		PickupMetal = debug.getproto(Knit.Controllers.HiddenMetalController.onKitLocalActivated, 4),
-		ReportPlayer = require(lplr.PlayerScripts.TS.controllers.global.report['report-controller']).default.reportPlayer,
-		ResetCharacter = debug.getproto(Knit.Controllers.ResetController.createBindable, 1),
-		SpawnRaven = debug.getproto(Knit.Controllers.RavenController.KnitStart, 1),
-		SummonerClawAttack = Knit.Controllers.SummonerClawHandController.attack,
-		WarlockTarget = debug.getproto(Knit.Controllers.WarlockStaffController.KnitStart, 2)
+		AfkStatus = safeGet(function() return debug.getproto(Knit.Controllers.AfkController.KnitStart, 1) end),
+		AttackEntity = safeGet(function() return Knit.Controllers.SwordController.sendServerRequest end),
+		BeePickup = safeGet(function() return Knit.Controllers.BeeNetController.trigger end),
+		CannonAim = safeGet(function() return debug.getproto(Knit.Controllers.CannonController.startAiming, 5) end),
+		CannonLaunch = safeGet(function() return Knit.Controllers.CannonHandController.launchSelf end),
+		ConsumeBattery = safeGet(function() return debug.getproto(Knit.Controllers.BatteryController.onKitLocalActivated, 1) end),
+		ConsumeItem = safeGet(function() return debug.getproto(Knit.Controllers.ConsumeController.onEnable, 1) end),
+		ConsumeSoul = safeGet(function() return Knit.Controllers.GrimReaperController.consumeSoul end),
+		ConsumeTreeOrb = safeGet(function() return debug.getproto(Knit.Controllers.EldertreeController.createTreeOrbInteraction, 1) end),
+		DepositPinata = safeGet(function() return debug.getproto(debug.getproto(Knit.Controllers.PiggyBankController.KnitStart, 2), 5) end),
+		DragonBreath = safeGet(function() return debug.getproto(Knit.Controllers.VoidDragonController.onKitLocalActivated, 5) end),
+		DragonEndFly = safeGet(function() return debug.getproto(Knit.Controllers.VoidDragonController.flapWings, 1) end),
+		DragonFly = safeGet(function() return Knit.Controllers.VoidDragonController.flapWings end),
+		DropItem = safeGet(function() return Knit.Controllers.ItemDropController.dropItemInHand end),
+		EquipItem = safeGet(function() return debug.getproto(require(replicatedStorage.TS.entity.entities['inventory-entity']).InventoryEntity.equipItem, 3) end),
+		FireProjectile = safeGet(function() return debug.getupvalue(Knit.Controllers.ProjectileController.launchProjectileWithValues, 2) end),
+		GroundHit = safeGet(function() return Knit.Controllers.FallDamageController.KnitStart end),
+		GuitarHeal = safeGet(function() return Knit.Controllers.GuitarController.performHeal end),
+		HannahKill = safeGet(function() return debug.getproto(Knit.Controllers.HannahController.registerExecuteInteractions, 1) end),
+		HarvestCrop = safeGet(function() return debug.getproto(debug.getproto(Knit.Controllers.CropController.KnitStart, 4), 1) end),
+		KaliyahPunch = safeGet(function() return debug.getproto(Knit.Controllers.DragonSlayerController.onKitLocalActivated, 1) end),
+		MageSelect = safeGet(function() return debug.getproto(Knit.Controllers.MageController.registerTomeInteraction, 1) end),
+		MinerDig = safeGet(function() return debug.getproto(Knit.Controllers.MinerController.setupMinerPrompts, 1) end),
+		PickupItem = safeGet(function() return Knit.Controllers.ItemDropController.checkForPickup end),
+		PickupMetal = safeGet(function() return debug.getproto(Knit.Controllers.HiddenMetalController.onKitLocalActivated, 4) end),
+		ReportPlayer = safeGet(function() return require(lplr.PlayerScripts.TS.controllers.global.report['report-controller']).default.reportPlayer end),
+		ResetCharacter = safeGet(function() return debug.getproto(Knit.Controllers.ResetController.createBindable, 1) end),
+		SpawnRaven = safeGet(function() return debug.getproto(Knit.Controllers.RavenController.KnitStart, 1) end),
+		SummonerClawAttack = safeGet(function() return Knit.Controllers.SummonerClawHandController.attack end),
+		WarlockTarget = safeGet(function() return debug.getproto(Knit.Controllers.WarlockStaffController.KnitStart, 2) end),
 	}
 
 	local function dumpRemote(tab)
@@ -8491,4 +8497,3 @@ run(function()
 		List = WinEffectName
 	})
 end)
-	
